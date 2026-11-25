@@ -39,3 +39,21 @@
 - `MAKEFUN_OUTPUT_DIR=/tmp/ol-out2 python3 main.py` → wrote 97 bytes
 - sha256 both runs: `9dce8fa5ced6e159e9db857190a0a917349fb9b6590c373d7cbe1bda1e62cb7d` — byte-identical (deterministic)
 - Output: 97 bytes / 97 chars, no trailing newline, exact entry text in both runs
+
+## Kit check (2026-11-25 ~09:44 WIB)
+
+- Command: `node cli/makefun.mjs check --kit . --repo <workdir> --transcripts <v1 bundle>` from kit dir
+- Result: 13 passed, 1 failed, 5 skipped, 5 checked at submission
+- ONLY failure: `thinking_priced` — 0 usage rows attached (expected: usage row subagent ditulis setelah run selesai)
+- Bundle v1: `~/workspace/makefun/submit/u-4z4ghtbwm1fn7mibrqum4bxgfghhgqzriyhd8v3-one-line-0be61e5a-transcripts-v1.tar.gz` (115,016 bytes, sha256 fb260fdb8ee27e76c677f48c36f6d8417206920d86f29c07310db5bd8f08b996)
+- Quota (09:43 WIB): can_submit true, 5/5 slot hari ini, blind round slot tersedia sampai 2026-11-25T09:45:36Z
+- Repo: https://github.com/epanpai/u-4z4ghtbwm1fn7mibrqum4bxgfghhgqzriyhd8v3-one-line-0be61e5a, commit 7d552fa19b860f2f3074344f9155f0e9d029850a, PUBLIC, description + homepage + topic makefun terpasang
+
+## Sisa langkah (parent / top-level agent — subagent TIDAK BISA)
+
+1. Setelah run subagent ini selesai, jalankan muse.db SELECT usage (query ada di output check `thinking_priced`) dengan agent_id `0d71de5b-4a62-4fb9-8c8f-2bf7834d1c8b` (builder) + `54b9cef5-2b9f-43ea-b590-428cb11dd270` (parent), tulis rows ke file JSONL apa adanya.
+2. Re-bundle dari top-level agent dengan `--muse-usage <file>` (bundle v2), ambil sesi builder + sesi parent.
+3. Re-check sampai 14/14 (thinking_priced lolos).
+4. Submit: `node <kit>/cli/makefun.mjs submit --competition u-4z4ghtbwm1fn7mibrqum4bxgfghhgqzriyhd8v3-one-line-0be61e5a --repo-url https://github.com/epanpai/u-4z4ghtbwm1fn7mibrqum4bxgfghhgqzriyhd8v3-one-line-0be61e5a --commit 7d552fa19b860f2f3074344f9155f0e9d029850a --title "One Line, One Laugh — Smart Speaker Roast" --bundle <v2> --keypair ~/workspace/makefun/makefun-keypair.json`
+5. Simpan receipt ke `~/workspace/makefun/submit/receipt-<submission-id>.json` (mode 600), verifikasi status via API.
+6. Deadline submit: 2026-11-26T01:45:00Z (26 Nov 08:45 WIB). Blind round 1 cutoff 09:45:36Z hari ini sudah dekat — submit secepatnya agar masuk ronde berikutnya.
